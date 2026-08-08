@@ -23,6 +23,25 @@
     "automerge": true
   },
 
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update the Ruby version directive in Gemfile (e.g. ruby \"4.0.6\")",
+      "managerFilePatterns": ["Gemfile"],
+      "matchStrings": ["ruby [\"'](?<currentValue>[\\d.]+)[\"']"],
+      "depNameTemplate": "ruby",
+      "datasourceTemplate": "ruby-version"
+    },
+    {
+      "customType": "regex",
+      "description": "Update mise-style .ruby-version files (ruby-X.Y.Z format, which Renovate's built-in ruby-version manager cannot parse)",
+      "managerFilePatterns": ["^\\.ruby-version$"],
+      "matchStrings": ["ruby-(?<currentValue>[\\d.]+)"],
+      "depNameTemplate": "ruby",
+      "datasourceTemplate": "ruby-version"
+    }
+  ],
+
   "packageRules": [
     {
       "description": "Group non-major JS/TS updates into one PR",
@@ -35,6 +54,12 @@
       "matchManagers": ["bundler"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "ruby dependencies"
+    },
+    {
+      "description": "Group Ruby version bumps (Dockerfile image, Gemfile directive, .ruby-version, mise.toml) into one PR so they cannot drift apart and break CI",
+      "matchDepNames": ["ruby"],
+      "matchDatasources": ["docker", "ruby-version"],
+      "groupName": "Ruby version"
     },
     {
       "description": "Group non-major Python updates into one PR",
