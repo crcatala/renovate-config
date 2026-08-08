@@ -1,0 +1,99 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
+
+  "dependencyDashboard": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "osvVulnerabilityAlerts": true,
+
+  "schedule": ["before 5am on Monday"],
+  "labels": ["dependencies"],
+  "assignees": ["crcatala"],
+
+  "ignoreScripts": true,
+  "platformAutomerge": true,
+  "automergeStrategy": "squash",
+
+  "minimumReleaseAge": "7 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on the first day of the month"],
+    "automerge": true
+  },
+
+  "packageRules": [
+    {
+      "description": "Group non-major JS/TS updates into one PR",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "js dependencies"
+    },
+    {
+      "description": "Group non-major Ruby updates into one PR",
+      "matchManagers": ["bundler"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "ruby dependencies"
+    },
+    {
+      "description": "Group non-major Python updates into one PR",
+      "matchManagers": ["pep621", "uv", "poetry", "pip_requirements", "pip-compile", "pdm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "python dependencies"
+    },
+    {
+      "description": "Group non-major Go updates into one PR",
+      "matchManagers": ["gomod"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "go dependencies"
+    },
+    {
+      "description": "Group non-major Rust updates into one PR",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "rust dependencies"
+    },
+    {
+      "description": "Group non-major container updates into one PR",
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "container images"
+    },
+    {
+      "description": "Group all GitHub Actions updates; pinned to SHAs by the helper preset above",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions",
+      "automerge": true
+    },
+    {
+      "description": "Group type definitions, which move constantly and rarely matter individually",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["/^@types//"],
+      "groupName": "type definitions"
+    },
+    {
+      "description": "Automerge stable (non-0.x) minor and patch updates once CI is green",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "description": "0.x releases treat minor as breaking, so they do not automerge",
+      "matchUpdateTypes": ["minor"],
+      "matchCurrentVersion": "/^0/",
+      "automerge": false
+    },
+    {
+      "description": "TypeScript can introduce breaking type checks even on a minor; review by hand",
+      "matchPackageNames": ["typescript"],
+      "groupName": null,
+      "automerge": false
+    },
+    {
+      "description": "Never automerge major updates; they deserve human review",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}
