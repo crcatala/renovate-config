@@ -1,4 +1,4 @@
-# renovate-config
+<h1><img src="assets/icon.png" width="40" height="40" align="top" alt="" /> renovate-config</h1>
 
 Shared Renovate policy for the fleet. One place to change dependency policy for
 every repo instead of fifteen.
